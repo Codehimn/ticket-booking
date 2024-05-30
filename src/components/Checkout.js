@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShoppingCart } from 'use-shopping-cart';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,15 +7,18 @@ function Checkout() {
     const location = useLocation();
     const navigate = useNavigate();
     const { cartDetails, clearCart } = useShoppingCart();
-    const { reservas } = location.state || {};
+    const [reservas, setReservas] = useState(location.state?.reservas || {});
+
+    useEffect(() => {
+        const storedReservas = JSON.parse(localStorage.getItem('reservas'));
+        if (storedReservas) {
+            setReservas(storedReservas);
+        }
+    }, []);
 
     const regresarAReservas = () => {
         navigate('/reserva');
     };
-
-    if (!reservas) {
-        return <div className="container mt-5 alert alert-warning">No hay reservas seleccionadas.</div>;
-    }
 
     const totalPrecio = Object.values(cartDetails).reduce((total, reserva) => total + reserva.price * reserva.quantity, 0);
 

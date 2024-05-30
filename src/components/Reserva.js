@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useShoppingCart, CartProvider } from 'use-shopping-cart';
+import { useShoppingCart } from 'use-shopping-cart';
 import axios from 'axios';
 
 function Reserva() {
@@ -33,7 +33,8 @@ function Reserva() {
 
     useEffect(() => {
         localStorage.setItem('counts', JSON.stringify(counts));
-    }, [counts]);
+        localStorage.setItem('reservas', JSON.stringify(cartDetails));
+    }, [counts, cartDetails]);
 
     const agregarReserva = (evento) => {
         if ((counts[evento.id] || 0) < evento.max_entradas) {
@@ -105,10 +106,4 @@ function Reserva() {
     );
 }
 
-const WrappedReserva = () => (
-    <CartProvider>
-        <Reserva />
-    </CartProvider>
-);
-
-export default WrappedReserva;
+export default Reserva;
