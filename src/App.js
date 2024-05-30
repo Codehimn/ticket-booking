@@ -9,10 +9,13 @@ import { AuthProvider } from './components/AuthContext';
 import Login from './components/Login';
 import { CartProvider } from 'use-shopping-cart';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
     return (
         <React.StrictMode>
+            <ToastContainer />
             <AuthProvider>
                 <CartProvider>
                     <Router>

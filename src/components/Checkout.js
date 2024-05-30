@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShoppingCart } from 'use-shopping-cart';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify'; // Importa toast
+import 'react-toastify/dist/ReactToastify.css'; // Importa estilos de toast
 
 function Checkout() {
     const location = useLocation();
     const navigate = useNavigate();
     const { cartDetails, clearCart } = useShoppingCart();
     const [reservas, setReservas] = useState(location.state?.reservas || {});
+    const [email, setEmail] = useState(location.state?.email || '');
 
     useEffect(() => {
         const storedReservas = JSON.parse(localStorage.getItem('reservas'));
@@ -18,6 +22,26 @@ function Checkout() {
 
     const regresarAReservas = () => {
         navigate('/reserva');
+    };
+
+    const finalizarCompra = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/confirmacion/', {
+                reservas: reservas,
+                email: email
+            });
+
+            if (response.data.success) {
+                toast.success('Compra finalizada con éxito. Se ha enviado un correo de confirmación.');
+                clearCart();
+                navigate('/confirmacion');
+            } else {
+                toast.error('Hubo un problema al finalizar la compra.');
+            }
+        } catch (error) {
+            console.error('Error finalizando la compra:', error);
+            toast.error('Hubo un problema al finalizar la compra.');
+        }
     };
 
     const totalPrecio = Object.values(cartDetails).reduce((total, reserva) => total + reserva.price * reserva.quantity, 0);
@@ -41,7 +65,11 @@ function Checkout() {
                 </div>
                 <div className="card-footer">
                     <button className="btn btn-secondary me-2" onClick={regresarAReservas}>Cancelar y regresar</button>
-                    <button className="btn btn-danger" onClick={clearCart}>Vaciar Carrito</button>
+                    <button className="btn btn-danger" onClick={() => {
+                        clearCart();
+                        toast.info('Carrito vaciado.');
+                    }}>Vaciar Carrito</button>
+                    <button className="btn btn-success" onClick={finalizarCompra}>Finalizar Compra</button>
                 </div>
             </div>
         </div>

@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useShoppingCart } from 'use-shopping-cart';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
+import { toast } from 'react-toastify'; // Importa toast
 
 function Reserva() {
     const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart();
     const navigate = useNavigate();
+    const { user, isAuthenticated } = useAuth(); // Usa el usuario autenticado
     const [counts, setCounts] = useState({});
     const [eventos, setEventos] = useState([]);
 
@@ -37,7 +40,9 @@ function Reserva() {
     }, [counts, cartDetails]);
 
     const agregarReserva = (evento) => {
-        if ((counts[evento.id] || 0) < evento.max_entradas) {
+        const totalEntradas = Object.values(counts).reduce((a, b) => a + b, 0);
+
+        if (totalEntradas < evento.max_entradas) {
             addItem({
                 id: evento.id,
                 name: evento.nombre,
@@ -49,8 +54,9 @@ function Reserva() {
                 ...prevCounts,
                 [evento.id]: (prevCounts[evento.id] || 0) + 1
             }));
+            toast.success(`Entrada para ${evento.nombre} agregada con éxito!`);
         } else {
-            alert(`No puede agregar más de ${evento.max_entradas} entradas para este evento.`);
+            toast.error(`No puede agregar más de ${evento.max_entradas} entradas en total.`);
         }
     };
 
@@ -60,13 +66,19 @@ function Reserva() {
             ...prevCounts,
             [evento.id]: Math.max((prevCounts[evento.id] || 1) - 1, 0)
         }));
+        toast.info(`Entrada para ${evento.nombre} eliminada.`);
     };
 
     const procederAlCheckout = () => {
+        if (!isAuthenticated || !user || !user.email) {
+            toast.warn('Debe iniciar sesión antes de proceder al checkout.');
+            return;
+        }
+
         if (Object.keys(cartDetails).length > 0) {
-            navigate('/checkout', { state: { reservas: cartDetails } });
+            navigate('/checkout', { state: { reservas: cartDetails, email: user.email } });
         } else {
-            alert('Por favor, agregue al menos una reserva antes de proceder.');
+            toast.warn('Por favor, agregue al menos una reserva antes de proceder.');
         }
     };
 
@@ -100,6 +112,7 @@ function Reserva() {
                 if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
                     clearCart();
                     setCounts({});
+                    toast.info('Carrito vaciado.');
                 }
             }}>Vaciar Carrito</button>
         </div>
