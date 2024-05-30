@@ -36,24 +36,28 @@ function Reserva() {
     }, [counts]);
 
     const agregarReserva = (evento) => {
-        addItem({
-            id: evento.id,
-            name: evento.nombre,
-            price: evento.precio,
-            currency: 'COP',
-            establecimiento: evento.establecimiento_nombre,
-        });
-        setCounts(prevCounts => ({
-            ...prevCounts,
-            [evento.id]: (prevCounts[evento.id] || 0) + 1
-        }));
+        if ((counts[evento.id] || 0) < evento.max_entradas) {
+            addItem({
+                id: evento.id,
+                name: evento.nombre,
+                price: evento.precio,
+                currency: 'COP',
+                establecimiento: evento.establecimiento_nombre,
+            });
+            setCounts(prevCounts => ({
+                ...prevCounts,
+                [evento.id]: (prevCounts[evento.id] || 0) + 1
+            }));
+        } else {
+            alert(`No puede agregar más de ${evento.max_entradas} entradas para este evento.`);
+        }
     };
 
     const eliminarReserva = (evento) => {
         removeItem(evento.id);
         setCounts(prevCounts => ({
             ...prevCounts,
-            [evento.id]: (prevCounts[evento.id] || 1) - 1
+            [evento.id]: Math.max((prevCounts[evento.id] || 1) - 1, 0)
         }));
     };
 
@@ -72,13 +76,15 @@ function Reserva() {
             <h2>Seleccione un Evento</h2>
             {eventos.map((evento) => (
                 <div key={evento.id} className="event-item">
+                    {evento.imagen_url && <img src={evento.imagen_url} alt={evento.nombre} className="event-image" />}
                     <h3>{evento.nombre}</h3>
                     <p>Precio: {evento.precio} COP</p>
-                    <p>Fecha: {evento.fecha}</p>
+                    <p>Fecha del evento: {new Date(evento.fecha_evento).toLocaleDateString()}</p>
+                    <p>Fecha de inicio de venta: {new Date(evento.fecha_inicio_venta).toLocaleDateString()}</p>
                     <p>Establecimiento: {evento.establecimiento_nombre}</p>
                     <button onClick={() => agregarReserva(evento)}>Agregar una entrada</button>
                     <button onClick={() => eliminarReserva(evento)}>Eliminar una entrada</button>
-                    <p>Cantidad seleccionada: {counts[evento.id] || 0}</p>
+                    <p>Cantidad seleccionada: {counts[evento.id] || 0} / {evento.max_entradas}</p>
                 </div>
             ))}
             <h3>Total entradas: {totalEntradas}</h3>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { auth, googleProvider } from '../firebaseConfig';
+import { auth, googleProvider, signInWithPopup } from '../firebaseConfig';
 
 const Login = () => {
     const { isAuthenticated, login } = useAuth();
@@ -16,7 +16,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await auth.signInWithPopup(googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
             login(result.user); // Pasar el usuario logueado
             navigate('/reserva');
         } catch (error) {
