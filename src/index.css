@@ -53,3 +53,16 @@ button:hover {
 .event-item:hover {
     background-color: #f0f0f0;
 }
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.btn {
+    margin-right: 10px;
+}
