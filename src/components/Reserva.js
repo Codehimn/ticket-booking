@@ -4,7 +4,7 @@ import { useShoppingCart, CartProvider } from 'use-shopping-cart';
 import axios from 'axios';
 
 function Reserva() {
-    const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart(); // Asegúrate de incluir clearCart aquí
+    const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart();
     const navigate = useNavigate();
     const [counts, setCounts] = useState({});
     const [eventos, setEventos] = useState([]);
@@ -84,8 +84,10 @@ function Reserva() {
             <h3>Total entradas: {totalEntradas}</h3>
             <button onClick={procederAlCheckout}>Proceder al Checkout</button>
             <button onClick={() => {
-                clearCart();
-                setCounts({});
+                if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                    clearCart();
+                    setCounts({});
+                }
             }}>Vaciar Carrito</button>
         </div>
     );

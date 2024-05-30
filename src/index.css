@@ -1,9 +1,9 @@
-/* src/index.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: #f8f9fa;
 }
 
 .App {
@@ -13,6 +13,10 @@ body {
 
 form {
     margin: 20px 0;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 input {
@@ -20,6 +24,7 @@ input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
 }
 
 button {
@@ -35,11 +40,14 @@ button:hover {
     background-color: #0056b3;
 }
 
-
-/* src/index.css */
 .event-item {
     cursor: pointer;
     transition: background-color 0.3s ease;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background: #fff;
 }
 
 .event-item:hover {

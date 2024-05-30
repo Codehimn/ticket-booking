@@ -16,8 +16,8 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await auth.signInWithPopup(googleProvider);
-            login();
+            const result = await auth.signInWithPopup(googleProvider);
+            login(result.user); // Pasar el usuario logueado
             navigate('/reserva');
         } catch (error) {
             console.error('Error logging in with Google:', error);
