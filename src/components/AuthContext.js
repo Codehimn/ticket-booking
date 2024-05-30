@@ -5,9 +5,8 @@ import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChange
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-        const storedUser = localStorage.getItem('user');
-        return !!storedUser; // Devuelve true si hay un usuario almacenado
-    });
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
 
     const login = (user) => {
         setIsAuthenticated(true);
