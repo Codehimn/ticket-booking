@@ -57,6 +57,10 @@ button:hover {
 .card-img-top {
     width: 100%;
     height: auto;
+    max-height: 200px;
+    /* Limita el tamaño máximo de la imagen */
+    object-fit: cover;
+    /* Ajusta la imagen sin distorsionar */
 }
 
 .card {
@@ -65,4 +69,54 @@ button:hover {
 
 .btn {
     margin-right: 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h2 {
+    color: #007bff;
+}
+
+h3 {
+    color: #0056b3;
+}
+
+p {
+    font-size: 16px;
+    color: #333;
+}
+
+.alert {
+    font-size: 18px;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.event-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.event-image {
+    max-width: 100%;
+    max-height: 200px;
+    /* Limita el tamaño máximo de la imagen */
+    object-fit: cover;
+    /* Ajusta la imagen sin distorsionar */
 }

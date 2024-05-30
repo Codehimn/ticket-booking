@@ -76,7 +76,11 @@ function Reserva() {
             <h2>Seleccione un Evento</h2>
             {eventos.map((evento) => (
                 <div key={evento.id} className="event-item card p-3 mb-3">
-                    {evento.imagen_url && <img src={evento.imagen_url} alt={evento.nombre} className="event-image card-img-top" />}
+                    {evento.imagen_url &&
+                        <div className="event-image-container">
+                            <img src={evento.imagen_url} alt={evento.nombre} className="event-image" />
+                        </div>
+                    }
                     <div className="card-body">
                         <h3 className="card-title">{evento.nombre}</h3>
                         <p className="card-text">Precio: {evento.precio} COP</p>
