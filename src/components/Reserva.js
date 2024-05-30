@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CartProvider, useShoppingCart } from 'use-shopping-cart';
+import { useShoppingCart, CartProvider } from 'use-shopping-cart';
 import axios from 'axios';
 
 function Reserva() {
-    const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart();
+    const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart(); // Asegúrate de incluir clearCart aquí
     const navigate = useNavigate();
     const [counts, setCounts] = useState({});
     const [eventos, setEventos] = useState([]);
@@ -83,7 +83,10 @@ function Reserva() {
             ))}
             <h3>Total entradas: {totalEntradas}</h3>
             <button onClick={procederAlCheckout}>Proceder al Checkout</button>
-            <button onClick={clearCart}>Vaciar Carrito</button>
+            <button onClick={() => {
+                clearCart();
+                setCounts({});
+            }}>Vaciar Carrito</button>
         </div>
     );
 }

@@ -1,4 +1,3 @@
-// src/api.js
 export const fetchEvents = async () => {
     try {
         const response = await fetch('https://your-api-endpoint.com/events'); // Replace with your actual API endpoint

@@ -8,22 +8,25 @@ import Home from './components/Home';
 import { AuthProvider } from './components/AuthContext';
 import Login from './components/Login';
 import { UserProvider } from './UserContext';
+import { CartProvider } from 'use-shopping-cart'; // Importa CartProvider
 
 const App = () => {
     return (
         <React.StrictMode>
             <UserProvider>
                 <AuthProvider>
-                    <Router>
-                        <NavBar />
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/home" element={<Home />} />
-                            <Route path="/reserva" element={<Reserva />} />
-                            <Route path="/checkout" element={<Checkout />} />
-                            <Route path="/confirmacion" element={<Confirmacion />} />
-                        </Routes>
-                    </Router>
+                    <CartProvider> {/* Añade CartProvider aquí */}
+                        <Router>
+                            <NavBar />
+                            <Routes>
+                                <Route path="/" element={<Login />} />
+                                <Route path="/home" element={<Home />} />
+                                <Route path="/reserva" element={<Reserva />} />
+                                <Route path="/checkout" element={<Checkout />} />
+                                <Route path="/confirmacion" element={<Confirmacion />} />
+                            </Routes>
+                        </Router>
+                    </CartProvider> {/* Cierra CartProvider aquí */}
                 </AuthProvider>
             </UserProvider>
         </React.StrictMode>

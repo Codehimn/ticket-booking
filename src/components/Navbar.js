@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import { Navbar, Nav } from 'react-bootstrap';
 
 const NavBar = () => {
     const { isAuthenticated, logout } = useAuth();
@@ -8,24 +9,26 @@ const NavBar = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/');
     };
 
     return (
-        <nav>
-            <ul>
-                {isAuthenticated && (
-                    <>
-                        <li>
-                            <Link to="/reserva">Reservas</Link>
-                        </li>
-                        <li>
-                            <button onClick={handleLogout}>Logout</button>
-                        </li>
-                    </>
-                )}
-            </ul>
-        </nav>
+        <Navbar bg="dark" variant="dark" expand="lg">
+            <Navbar.Brand as={Link} to="/">Ticket Booking</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="ml-auto">
+                    {isAuthenticated ? (
+                        <>
+                            <Nav.Link as={Link} to="/reserva">Reservas</Nav.Link>
+                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                        </>
+                    ) : (
+                        <Nav.Link as={Link} to="/">Login</Nav.Link>
+                    )}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
     );
 };
 

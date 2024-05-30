@@ -5,8 +5,8 @@ import { useShoppingCart } from 'use-shopping-cart';
 function Checkout() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { cartDetails, clearCart } = useShoppingCart();
     const { reservas } = location.state || {};
-    const { clearCart } = useShoppingCart();
 
     const regresarAReservas = () => {
         navigate('/reserva');
@@ -16,12 +16,12 @@ function Checkout() {
         return <div>No hay reservas seleccionadas.</div>;
     }
 
-    const totalPrecio = Object.values(reservas).reduce((total, reserva) => total + reserva.price * reserva.quantity, 0);
+    const totalPrecio = Object.values(cartDetails).reduce((total, reserva) => total + reserva.price * reserva.quantity, 0);
 
     return (
         <div>
             <h2>Resumen de Reservas</h2>
-            {Object.values(reservas).map((reserva) => (
+            {Object.values(cartDetails).map((reserva) => (
                 <div key={reserva.id}>
                     <h3>{reserva.name}</h3>
                     <p>Precio: {reserva.price} COP</p>
@@ -31,6 +31,7 @@ function Checkout() {
             ))}
             <h3>Total a pagar: {totalPrecio} COP</h3>
             <button onClick={regresarAReservas}>Cancelar y regresar</button>
+            <button onClick={clearCart}>Vaciar Carrito</button>
         </div>
     );
 }
