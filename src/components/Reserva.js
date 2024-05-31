@@ -9,7 +9,7 @@ import './Reserva.css';
 
 function Reserva() {
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, token } = useAuth();
     const [counts, setCounts] = useState({});
     const [eventos, setEventos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,12 +32,11 @@ function Reserva() {
 
     useEffect(() => {
         const fetchEventos = async () => {
-            if (establecimientoNombre) {
+            if (establecimientoNombre && token) {
                 try {
-                    const token = localStorage.getItem('token'); // O de donde almacenes tu token
-                    const response = await axios.get('http://localhost:3001/api/eventos', {
+                    const response = await axios.get('/api/entradas', {
                         params: { nombre: establecimientoNombre },
-                        headers: { Authorization: token }
+                        headers: { Authorization: `Bearer ${token}` }
                     });
                     setEventos(response.data);
                 } catch (error) {
@@ -47,7 +46,7 @@ function Reserva() {
         };
 
         fetchEventos();
-    }, [establecimientoNombre]);
+    }, [establecimientoNombre, token, setEventos]);
 
     useEffect(() => {
         const storedCounts = JSON.parse(localStorage.getItem('counts')) || {};

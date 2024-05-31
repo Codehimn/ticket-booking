@@ -4,7 +4,7 @@ import Reserva from './components/Reserva';
 import Checkout from './components/Checkout';
 import NavBar from './components/Navbar';
 import Confirmacion from './components/Confirmacion';
-import QRScanner from './components/qr/qr';
+import QRScanner from './components/qr/QRScanner';
 import { AuthProvider } from './components/AuthContext';
 import Login from './components/Login';
 import { CartProvider } from 'use-shopping-cart';
@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
     return (
         <React.StrictMode>
-            <ToastContainer />
+            <ToastContainer theme="dark" position="top-center" />
             <AuthProvider>
                 <CartProvider>
                     <Router>

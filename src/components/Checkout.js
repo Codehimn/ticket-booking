@@ -5,6 +5,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from './AuthContext';
 
 function Checkout() {
     const location = useLocation();
@@ -12,6 +13,7 @@ function Checkout() {
     const { cartDetails, clearCart } = useShoppingCart();
     const [reservas, setReservas] = useState(location.state?.reservas || {});
     const [email, setEmail] = useState(location.state?.email || '');
+    const { token } = useAuth();
 
     useEffect(() => {
         const storedReservas = JSON.parse(localStorage.getItem('reservas'));
@@ -30,9 +32,11 @@ function Checkout() {
 
     const finalizarCompra = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/api/confirmacion/', {
+            const response = await axios.post('/api/confirmacion/', {
                 reservas: reservas,
-                email: email
+                email: email,
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             if (response.data.success) {
