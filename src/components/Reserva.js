@@ -34,8 +34,10 @@ function Reserva() {
         const fetchEventos = async () => {
             if (establecimientoNombre) {
                 try {
-                    const response = await axios.get('http://localhost:8000/api/entradas/por_establecimiento/', {
-                        params: { nombre: establecimientoNombre }
+                    const token = localStorage.getItem('token'); // O de donde almacenes tu token
+                    const response = await axios.get('http://localhost:3001/api/eventos', {
+                        params: { nombre: establecimientoNombre },
+                        headers: { Authorization: token }
                     });
                     setEventos(response.data);
                 } catch (error) {

@@ -1,10 +1,10 @@
-:root {
+div[data-theme="light"] {
     --bg-color: #ffffff;
     --text-color: #000000;
 }
 
 [data-theme="dark"] {
-    --bg-color: #000000;
+    --bg-color: #495057;
     --text-color: #ffffff;
 }
 
@@ -69,9 +69,7 @@ button:hover {
     width: 100%;
     height: auto;
     max-height: 200px;
-    /* Limita el tamaño máximo de la imagen */
     object-fit: cover;
-    /* Ajusta la imagen sin distorsionar */
 }
 
 .card {
@@ -115,7 +113,6 @@ p {
     justify-content: space-between;
 }
 
-
 .event-image-container {
     display: flex;
     justify-content: center;
@@ -127,7 +124,5 @@ p {
 .event-image {
     max-width: 100%;
     max-height: 200px;
-    /* Limita el tamaño máximo de la imagen */
     object-fit: cover;
-    /* Ajusta la imagen sin distorsionar */
 }
