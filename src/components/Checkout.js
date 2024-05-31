@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useShoppingCart } from 'use-shopping-cart';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { toast } from 'react-toastify'; // Importa toast
-import 'react-toastify/dist/ReactToastify.css'; // Importa estilos de toast
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Checkout() {
     const location = useLocation();
@@ -20,6 +20,10 @@ function Checkout() {
         }
     }, []);
 
+    useEffect(() => {
+        localStorage.setItem('reservas', JSON.stringify(cartDetails));
+    }, [cartDetails]);
+
     const regresarAReservas = () => {
         navigate('/reserva');
     };
@@ -34,6 +38,7 @@ function Checkout() {
             if (response.data.success) {
                 toast.success('Compra finalizada con éxito. Se ha enviado un correo de confirmación.');
                 clearCart();
+                localStorage.removeItem('reservas');
                 navigate('/confirmacion');
             } else {
                 toast.error('Hubo un problema al finalizar la compra.');
@@ -67,6 +72,7 @@ function Checkout() {
                     <button className="btn btn-secondary me-2" onClick={regresarAReservas}>Cancelar y regresar</button>
                     <button className="btn btn-danger" onClick={() => {
                         clearCart();
+                        localStorage.removeItem('reservas');
                         toast.info('Carrito vaciado.');
                     }}>Vaciar Carrito</button>
                     <button className="btn btn-success" onClick={finalizarCompra}>Finalizar Compra</button>

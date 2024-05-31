@@ -17,12 +17,17 @@ const NavBar = () => {
             <Navbar.Brand as={Link} to="/">Ticket Booking</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
+                <Nav className="mr-auto">
+                    {isAuthenticated && (
+                        <Nav.Link as={Link} to="/reserva">Reservas</Nav.Link>
+                    )}
+                    {isAuthenticated && (
+                        <Nav.Link as={Link} to="/lecturaqr">Lectura QR</Nav.Link>
+                    )}
+                </Nav>
+                <Nav>
                     {isAuthenticated ? (
-                        <>
-                            <Nav.Link as={Link} to="/reserva">Reservas</Nav.Link>
-                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-                        </>
+                        <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                     ) : (
                         <Nav.Link as={Link} to="/">Login</Nav.Link>
                     )}

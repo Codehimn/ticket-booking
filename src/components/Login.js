@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { auth, googleProvider, signInWithPopup } from '../firebaseConfig';
+import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 
 const Login = () => {
     const { isAuthenticated, login } = useAuth();
     const navigate = useNavigate();
+    const auth = getAuth();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -16,9 +17,8 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            login(result.user); // Pasar el usuario logueado
-            navigate('/reserva');
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error('Error logging in with Google:', error);
         }

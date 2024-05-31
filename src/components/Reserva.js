@@ -3,46 +3,68 @@ import { useNavigate } from 'react-router-dom';
 import { useShoppingCart } from 'use-shopping-cart';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
-import { toast } from 'react-toastify'; // Importa toast
+import { toast } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './Reserva.css';
 
 function Reserva() {
-    const { addItem, removeItem, clearCart, cartDetails } = useShoppingCart();
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth(); // Usa el usuario autenticado
+    const { user, isAuthenticated } = useAuth();
     const [counts, setCounts] = useState({});
     const [eventos, setEventos] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [establecimientoNombre, setEstablecimientoNombre] = useState('');
+    const { addItem, removeItem, cartCount } = useShoppingCart();
+
+    useEffect(() => {
+        const fetchConfig = async () => {
+            try {
+                const response = await fetch('/config.json');
+                const config = await response.json();
+                setEstablecimientoNombre(config.establecimiento_nombre);
+            } catch (error) {
+                console.error('Error fetching config:', error);
+            }
+        };
+
+        fetchConfig();
+    }, []);
 
     useEffect(() => {
         const fetchEventos = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/api/entradas/por_establecimiento/', {
-                    params: { nombre: 'Establecimiento 1' }
-                });
-                setEventos(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            if (establecimientoNombre) {
+                try {
+                    const response = await axios.get('http://localhost:8000/api/entradas/por_establecimiento/', {
+                        params: { nombre: establecimientoNombre }
+                    });
+                    setEventos(response.data);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
             }
         };
 
         fetchEventos();
-    }, []);
+    }, [establecimientoNombre]);
 
     useEffect(() => {
-        const storedCounts = localStorage.getItem('counts');
-        if (storedCounts) {
-            setCounts(JSON.parse(storedCounts));
-        }
+        const storedCounts = JSON.parse(localStorage.getItem('counts')) || {};
+        setCounts(storedCounts);
     }, []);
 
     useEffect(() => {
         localStorage.setItem('counts', JSON.stringify(counts));
-        localStorage.setItem('reservas', JSON.stringify(cartDetails));
-    }, [counts, cartDetails]);
+    }, [counts]);
 
     const agregarReserva = (evento) => {
-        const totalEntradas = Object.values(counts).reduce((a, b) => a + b, 0);
+        const eventoCount = counts[evento.id] || 0;
 
-        if (totalEntradas < evento.max_entradas) {
+        if (eventoCount < evento.max_entradas) {
+            const updatedCounts = {
+                ...counts,
+                [evento.id]: eventoCount + 1,
+            };
+            setCounts(updatedCounts);
             addItem({
                 id: evento.id,
                 name: evento.nombre,
@@ -50,23 +72,23 @@ function Reserva() {
                 currency: 'COP',
                 establecimiento: evento.establecimiento_nombre,
             });
-            setCounts(prevCounts => ({
-                ...prevCounts,
-                [evento.id]: (prevCounts[evento.id] || 0) + 1
-            }));
             toast.success(`Entrada para ${evento.nombre} agregada con éxito!`);
         } else {
-            toast.error(`No puede agregar más de ${evento.max_entradas} entradas en total.`);
+            toast.error(`No puede agregar más de ${evento.max_entradas} entradas para este evento.`);
         }
     };
 
     const eliminarReserva = (evento) => {
-        removeItem(evento.id);
-        setCounts(prevCounts => ({
-            ...prevCounts,
-            [evento.id]: Math.max((prevCounts[evento.id] || 1) - 1, 0)
-        }));
-        toast.info(`Entrada para ${evento.nombre} eliminada.`);
+        const eventoCount = counts[evento.id] || 0;
+        if (eventoCount > 0) {
+            const updatedCounts = {
+                ...counts,
+                [evento.id]: eventoCount - 1,
+            };
+            setCounts(updatedCounts);
+            removeItem(evento.id);
+            toast.info(`Entrada para ${evento.nombre} eliminada.`);
+        }
     };
 
     const procederAlCheckout = () => {
@@ -75,8 +97,8 @@ function Reserva() {
             return;
         }
 
-        if (Object.keys(cartDetails).length > 0) {
-            navigate('/checkout', { state: { reservas: cartDetails, email: user.email } });
+        if (cartCount > 0) {
+            navigate('/checkout', { state: { reservas: counts, email: user.email } });
         } else {
             toast.warn('Por favor, agregue al menos una reserva antes de proceder.');
         }
@@ -84,37 +106,44 @@ function Reserva() {
 
     const totalEntradas = Object.values(counts).reduce((a, b) => a + b, 0);
 
+    const filteredEventos = eventos.filter((evento) =>
+        evento.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="container mt-5">
             <h2>Seleccione un Evento</h2>
-            {eventos.map((evento) => (
-                <div key={evento.id} className="event-item card p-3 mb-3">
-                    {evento.imagen_url &&
+            <input
+                type="text"
+                placeholder="Buscar eventos..."
+                className="form-control mb-3"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {filteredEventos.map((evento) => (
+                <div key={evento.id} className="event-item card p-3 mb-3 shadow-sm">
+                    {evento.imagen_url && (
                         <div className="event-image-container">
-                            <img src={evento.imagen_url} alt={evento.nombre} className="event-image" />
+                            <img src={evento.imagen_url} alt={evento.nombre} className="img-fluid rounded" />
                         </div>
-                    }
-                    <div className="card-body">
-                        <h3 className="card-title">{evento.nombre}</h3>
-                        <p className="card-text">Precio: {evento.precio} COP</p>
-                        <p className="card-text">Fecha del evento: {new Date(evento.fecha_evento).toLocaleDateString()}</p>
-                        <p className="card-text">Fecha de inicio de venta: {new Date(evento.fecha_inicio_venta).toLocaleDateString()}</p>
-                        <p className="card-text">Establecimiento: {evento.establecimiento_nombre}</p>
-                        <button className="btn btn-primary me-2" onClick={() => agregarReserva(evento)}>Agregar una entrada</button>
-                        <button className="btn btn-danger" onClick={() => eliminarReserva(evento)}>Eliminar una entrada</button>
-                        <p className="mt-2">Cantidad seleccionada: {counts[evento.id] || 0} / {evento.max_entradas}</p>
+                    )}
+                    <div className="event-details">
+                        <h3>{evento.nombre}</h3>
+                        <p>{evento.descripcion}</p>
+                        <p><strong>Precio:</strong> {evento.precio} COP</p>
+                        <p><strong>Cantidad:</strong> {counts[evento.id] || 0}</p>
+                        <p><strong>Establecimiento:</strong> {evento.establecimiento_nombre}</p>
+                        <button className="btn btn-success me-2" onClick={() => agregarReserva(evento)}>
+                            Agregar Entrada
+                        </button>
+                        <button className="btn btn-danger" onClick={() => eliminarReserva(evento)}>
+                            Eliminar Entrada
+                        </button>
                     </div>
                 </div>
             ))}
-            <h3>Total entradas: {totalEntradas}</h3>
-            <button className="btn btn-success me-2" onClick={procederAlCheckout}>Proceder al Checkout</button>
-            <button className="btn btn-warning" onClick={() => {
-                if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-                    clearCart();
-                    setCounts({});
-                    toast.info('Carrito vaciado.');
-                }
-            }}>Vaciar Carrito</button>
+            <h3>Total de entradas: {totalEntradas}</h3>
+            <button className="btn btn-primary" onClick={procederAlCheckout}>Proceder al Checkout</button>
         </div>
     );
 }
