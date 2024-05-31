@@ -14,7 +14,7 @@ function Reserva() {
     const [eventos, setEventos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [establecimientoNombre, setEstablecimientoNombre] = useState('');
-    const { addItem, removeItem, cartCount } = useShoppingCart();
+    const { addItem, removeItem, cartDetails } = useShoppingCart();
 
     useEffect(() => {
         const fetchConfig = async () => {
@@ -71,6 +71,7 @@ function Reserva() {
                 price: evento.precio,
                 currency: 'COP',
                 establecimiento: evento.establecimiento_nombre,
+                quantity: eventoCount + 1,
             });
             toast.success(`Entrada para ${evento.nombre} agregada con éxito!`);
         } else {
@@ -97,7 +98,7 @@ function Reserva() {
             return;
         }
 
-        if (cartCount > 0) {
+        if (Object.keys(cartDetails).length > 0) {
             navigate('/checkout', { state: { reservas: counts, email: user.email } });
         } else {
             toast.warn('Por favor, agregue al menos una reserva antes de proceder.');

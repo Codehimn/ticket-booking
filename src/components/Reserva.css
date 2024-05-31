@@ -1,40 +1,31 @@
-.container {
-    max-width: 800px;
-    margin: auto;
-}
-
 .event-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s ease;
+    justify-content: center;
 }
 
 .event-image-container {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    max-width: 300px;
 }
 
 .event-details {
     text-align: center;
 }
 
-.btn {
-    margin: 5px 0;
-}
-
-.flash {
-    animation: flashAnimation 0.3s ease-in-out;
-}
-
-@keyframes flashAnimation {
-    from {
-        transform: scale(1);
+@media (min-width: 768px) {
+    .event-item {
+        flex-direction: row;
+        align-items: flex-start;
     }
 
-    to {
-        transform: scale(1.05);
+    .event-image-container {
+        width: 50%;
+    }
+
+    .event-details {
+        text-align: left;
+        width: 50%;
     }
 }
