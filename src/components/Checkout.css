@@ -1,0 +1,81 @@
+.checkout-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.checkout-card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.event-image-container {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.event-image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.cantidad-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.decrement-btn,
+.increment-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #ced4da;
+    background-color: #ffffff;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+}
+
+.decrement-btn:hover,
+.increment-btn:hover {
+    background-color: #e9ecef;
+}
+
+.cantidad-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+.confirmar-btn {
+    background-color: #4a90e2;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.confirmar-btn:hover {
+    background-color: #357ABD;
+}
