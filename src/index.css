@@ -1,11 +1,15 @@
 div[data-theme="light"] {
     --bg-color: #ffffff;
-    --text-color: #000000;
+    --bg-color2: #61cbfc;
+    --text-color: #252525;
+    --text-color2: #5a5151;
 }
 
 [data-theme="dark"] {
     --bg-color: #495057;
+    --bg-color2: #252525;
     --text-color: #ffffff;
+    --text-color2: #61cbfc;
 }
 
 body {
@@ -24,32 +28,12 @@ body {
 
 form {
     margin: 20px 0;
-    background: #ffffff;
+    background: var(--bg-color);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-input {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
 
 .event-item {
     cursor: pointer;
@@ -58,11 +42,12 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
-    background: #fff;
+    background-color: var(--bg-color2);
+    color: var(--text-color);
 }
 
 .event-item:hover {
-    background-color: #f0f0f0;
+    background-color: var(--bg-color);
 }
 
 .card-img-top {
@@ -73,34 +58,17 @@ button:hover {
 }
 
 .card {
+    background-color: var(--bg-color2);
+    color: var(--text-color);
     margin-bottom: 20px;
 }
 
-.btn {
-    margin-right: 10px;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-p {
-    font-size: 16px;
-    color: #333;
-}
-
-.alert {
-    font-size: 18px;
-}
 
 .card-header {
     background-color: #007bff;
-    color: white;
 }
 
 .card-footer {
-    background-color: #f8f9fa;
     display: flex;
     justify-content: space-between;
 }
