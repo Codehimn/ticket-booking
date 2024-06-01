@@ -10,6 +10,7 @@ import Login from './components/Login';
 import { CartProvider } from 'use-shopping-cart';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
+import UserProfile from './components/Profile';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                             <Route path="/confirmacion" element={<ProtectedRoute><Confirmacion /></ProtectedRoute>} />
                             <Route path="/lecturaqr" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
+                            <Route path="/perfil" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
                         </Routes>
                     </Router>
                 </CartProvider>

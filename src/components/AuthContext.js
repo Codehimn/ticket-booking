@@ -40,13 +40,11 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                const { email } = currentUser;
-                const user = { email };
-                const token = await currentUser.getIdToken(); // Obtener el token de Firebase
-                setUser(user);
+                const token = await currentUser.getIdToken();
+                setUser(currentUser);
                 setToken(token);
                 setIsAuthenticated(true);
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(currentUser));
                 localStorage.setItem('token', token);
             } else {
                 setUser(null);

@@ -33,6 +33,7 @@ const NavBar = () => {
                         <>
                             <Nav.Link as={Link} to="/reserva">Reservas</Nav.Link>
                             <Nav.Link as={Link} to="/lecturaqr">Lectura QR</Nav.Link>
+                            <Nav.Link as={Link} to="/perfil">Perfil</Nav.Link> {/* Añadir esta línea */}
                         </>
                     )}
                 </Nav>

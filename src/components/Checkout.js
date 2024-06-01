@@ -55,23 +55,23 @@ function Checkout() {
                     <label htmlFor="cantidad">Cantidad:</label>
                     <div className="input-group">
                         <button
-                            className="btn btn-outline-secondary decrement-btn"
+                            className="btn btn-outline-secondary"
                             type="button"
                             onClick={() => handleCantidadChange(cantidad - 1)}
                         >
                             -
                         </button>
                         <input
-                            type="number"
+                            // type="number"
                             id="cantidad"
-                            className="form-control text-center cantidad-input"
+                            className="text-center"
                             value={cantidad}
                             onChange={(e) => handleCantidadChange(Number(e.target.value))}
                             min="1"
                             max={evento.max_entradas}
                         />
                         <button
-                            className="btn btn-outline-secondary increment-btn"
+                            className="btn btn-outline-secondary"
                             type="button"
                             onClick={() => handleCantidadChange(cantidad + 1)}
                         >
@@ -79,7 +79,7 @@ function Checkout() {
                         </button>
                     </div>
                 </div>
-                <button className="btn btn-primary mt-3 confirmar-btn" onClick={agregarReserva}>
+                <button className="btn btn-primary mt-3" onClick={agregarReserva}>
                     Confirmar Reserva
                 </button>
             </div>
